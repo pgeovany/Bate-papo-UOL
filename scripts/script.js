@@ -73,3 +73,9 @@ function sendMessage() {
    console.log(message);
    const sendRequest = axios.post('https://mock-api.driven.com.br/api/v6/uol/messages', message);
 }
+
+document.querySelector("input").onkeydown = function(event) {
+    if(event.key === "Enter") {
+        sendMessage();
+    }
+};

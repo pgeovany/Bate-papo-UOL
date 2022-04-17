@@ -18,10 +18,14 @@
 
     <div class="messageBox">
         <input type="text" placeholder="Escreva aqui...">
-        <ion-icon name="paper-plane-outline"></ion-icon>
+        <ion-icon onclick="sendMessage()" name="paper-plane-outline"></ion-icon>
     </div>
 
-    <div class="content"></div>
+    <div class="content">
+        <ul class="messages">
+        </ul>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="/scripts/script.js"></script>
 </body>
 </html>

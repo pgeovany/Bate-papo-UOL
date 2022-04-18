@@ -2,32 +2,38 @@ const userName = {
     name: prompt("Qual o seu nome?")
 }
 
-const request = axios.post('https://mock-api.driven.com.br/api/v6/uol/participants', userName);
+getMessages();
+logIn();
 
-request.then(handleSuccess);
-//request.catch(handleError);
+function logIn() {
+    const request = axios.post('https://mock-api.driven.com.br/api/v6/uol/participants', userName);
+    request.then(handleSuccess);
+    request.catch(handleError);
+}
 
 function handleSuccess(response) {
+    setInterval(pingServer, 4000);
+    setInterval(getMessages, 3000);
+}
+
+function handleError(error) {
+    if(error.response.status === 400) {
+        userName.name = prompt("Esse nome já está em uso. Por favor, escolha outro nome.");
+        logIn();
+    }
+}
+
+function getMessages () {
     const promisse = axios.get('https://mock-api.driven.com.br/api/v6/uol/messages');
     promisse.then(renderMessages);
 }
 
 function pingServer () {
-    let pingStatus = axios.post('https://mock-api.driven.com.br/api/v6/uol/status', userName);
+    axios.post('https://mock-api.driven.com.br/api/v6/uol/status', userName);
 }
 
-setInterval(pingServer, 4000);
-setInterval(handleSuccess, 3000);
-
 function renderMessages(response) {
-    //console.log(response.data.length);
-//     statusMessages = response.data.filter(index => index.type === 'status');
-//     privateMessages = response.data.filter(index => index.type === 'private_message');
-//     messages = response.data.filter(index => index.type === 'message');
-//     console.log(statusMessages);
-//     console.log(privateMessages);
-//     console.log(messages);
-//
+
     let content = document.querySelector(".messages");
     for (let i = 0; i < response.data.length; i++) {
         if(response.data[i].type === 'status'){
@@ -49,7 +55,7 @@ function renderMessages(response) {
             </li>
             `
         }
-        if(response.data[i].to === userName.name){
+        if(response.data[i].type === 'private_message' && response.data[i].to === userName.name){
             content.innerHTML += `
             <li class="${response.data[i].type}">
                 (${response.data[i].time}) 
@@ -72,6 +78,20 @@ function sendMessage() {
    }
    console.log(message);
    const sendRequest = axios.post('https://mock-api.driven.com.br/api/v6/uol/messages', message);
+   document.querySelector("input").value="";
+   sendRequest.then(sendMessageSuccess);
+   sendRequest.catch(sendMessageError);
+}
+
+function sendMessageSuccess(response) {
+    getMessages();
+}
+
+function sendMessageError(error) {
+    if(error.response.status === 400) {
+        alert("Você não está online! Por favor, faça login novamente.");
+        window.location.reload();
+    }
 }
 
 document.querySelector("input").onkeydown = function(event) {

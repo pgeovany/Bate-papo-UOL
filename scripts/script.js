@@ -35,6 +35,7 @@ function pingServer () {
 function renderMessages(response) {
 
     let content = document.querySelector(".messages");
+    content.innerHTML = '';
     for (let i = 0; i < response.data.length; i++) {
         if(response.data[i].type === 'status'){
             content.innerHTML += `
@@ -66,7 +67,7 @@ function renderMessages(response) {
             `
         }
     }
-    content.scrollIntoView(false);
+    content.querySelector("li:last-child").scrollIntoView();
 }
 
 function sendMessage() {

@@ -94,7 +94,7 @@ function sendMessageError(error) {
     }
 }
 
-document.querySelector("input").addEventListener("keydown", event => {
+document.querySelector("input").addEventListener("keyup", event => {
     if(event.key === "Enter"){
         sendMessage();
     }

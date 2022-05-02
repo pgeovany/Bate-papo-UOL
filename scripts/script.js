@@ -77,7 +77,6 @@ function sendMessage() {
        text: document.querySelector("input").value,
        type: "message"
    }
-   console.log(message);
    const sendRequest = axios.post('https://mock-api.driven.com.br/api/v6/uol/messages', message);
    document.querySelector("input").value="";
    sendRequest.then(sendMessageSuccess);
@@ -95,8 +94,8 @@ function sendMessageError(error) {
     }
 }
 
-document.querySelector("input").onkeydown = function(event) {
-    if(event.key === "Enter") {
+document.querySelector("input").addEventListener("keydown", event => {
+    if(event.key === "Enter"){
         sendMessage();
     }
-};
+})
